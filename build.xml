@@ -1,0 +1,55 @@
+<project name="sampleSocketIO" default="dist" basedir=".">
+    <description>
+        simple example build file
+    </description>
+  <!-- set global properties for this build -->
+  <property name="VERSION" value="0.1"/>
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+
+  <path id="socketio.classpath">
+    <pathelement location="lib/socketio.jar"/>
+  </path>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init"
+        description="compile the source " >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}">  
+      <classpath refid="socketio.classpath"/>
+    </javac>
+  </target>
+
+  <target name="dist" depends="compile"
+        description="generate the distribution" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}"/>
+
+    <!-- Put everything in ${build} into the sampleSocketIO-${VERSION}.jar file -->
+    <jar jarfile="${dist}/sampleSocketIO-${VERSION}.jar" basedir="${build}"/>
+  </target>
+
+ 
+  <target name="run" depends="dist">
+    <java classname="com.sailmeter.sampleSocketIO.BasicExample" fork="true" failonerror="true">
+      <classpath>
+        <pathelement location="${dist}/sampleSocketIO-${VERSION}.jar"/>
+        <pathelement location="lib/socketio.jar"/>
+      </classpath>
+     </java>
+  </target>
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+</project>
